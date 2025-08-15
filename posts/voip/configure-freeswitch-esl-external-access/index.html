@@ -209,7 +209,100 @@ Edit the FreeSWITCH Event Socket configuration file:</p>
 <p>If successful, we will be prompted for the ESL password (<code>ClueCon</code> by default).</p>
 <hr>
 <h2 id="caution">Caution</h2>
-<p>Exposing the FreeSWITCH ESL port (8021) to external networks can pose <strong>serious security risks</strong>.</p> </article> <hr class="my-8 border-dashed">  <ul class="mt-4 mb-8 sm:my-8"> <li class="group inline-block group-hover:cursor-pointer my-1 underline-offset-4"> <a href="/tags/free-switch/" class="relative pe-2 text-lg underline decoration-dashed group-hover:-top-0.5 group-hover:text-accent focus-visible:p-1 focus-visible:no-underline text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block opacity-80 -me-3.5 size-4"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 9l14 0" /><path d="M5 15l14 0" /><path d="M11 4l-4 16" /><path d="M17 4l-4 16" /></svg>
+<p>Exposing the FreeSWITCH ESL port (8021) to external networks can pose <strong>serious security risks</strong>.</p>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HowTo",
+      "name": "How to Configure FreeSWITCH ESL for External Access",
+      "description": "Step-by-step guide to configure FreeSWITCH Event Socket Layer (ESL) for external access, including firewall rules, ACL setup, and security best practices to prevent unauthorized access.",
+      "totalTime": "PT15M",
+      "supply": [
+        { "@type": "HowToSupply", "name": "FreeSWITCH installed on a virtual machine" },
+        { "@type": "HowToSupply", "name": "Access to server terminal" }
+      ],
+      "tool": [
+        { "@type": "HowToTool", "name": "Terminal / SSH client" },
+        { "@type": "HowToTool", "name": "Text editor (nano, vim, etc.)" }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Verify FreeSWITCH ESL on Port 8021",
+          "text": "Run 'netstat -tulpn' and confirm FreeSWITCH is listening on port 8021."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Configure Firewall to Allow ESL Access",
+          "text": "Enable UFW, allow TCP traffic on port 8021, and verify rules using 'sudo ufw status'."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Configure FreeSWITCH for External Access",
+          "text": "Set up Access Control in the FreeSWITCH admin interface, edit event_socket.conf.xml to listen on 0.0.0.0, set password, and apply inbound ACL."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Restart FreeSWITCH",
+          "text": "Restart the FreeSWITCH service using 'sudo systemctl restart freeswitch'."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Test the Connection",
+          "text": "Use 'telnet <vm_ip> 8021' from another machine to confirm external ESL access."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is FreeSWITCH ESL?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FreeSWITCH Event Socket Layer (ESL) is an interface that allows external applications to communicate with a running FreeSWITCH instance over TCP, enabling commands, event subscriptions, and real-time control."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What port does FreeSWITCH ESL use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "By default, FreeSWITCH ESL listens on TCP port 8021 for incoming connections."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it safe to expose FreeSWITCH ESL to the internet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Directly exposing FreeSWITCH ESL to the internet is risky. You should change the default password, restrict allowed IPs using ACLs, and ideally use a VPN or SSH tunnel for external access."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I test a FreeSWITCH ESL connection?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From another machine, use 'telnet <server_ip> 8021'. If successful, you'll be prompted for the ESL password (default is ClueCon)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I change the default ESL password?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can change the password in /etc/freeswitch/autoload_configs/event_socket.conf.xml by modifying the 'password' parameter."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script> </article> <hr class="my-8 border-dashed">  <ul class="mt-4 mb-8 sm:my-8"> <li class="group inline-block group-hover:cursor-pointer my-1 underline-offset-4"> <a href="/tags/free-switch/" class="relative pe-2 text-lg underline decoration-dashed group-hover:-top-0.5 group-hover:text-accent focus-visible:p-1 focus-visible:no-underline text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block opacity-80 -me-3.5 size-4"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 9l14 0" /><path d="M5 15l14 0" /><path d="M11 4l-4 16" /><path d="M17 4l-4 16" /></svg>
 &nbsp;<span>FreeSWITCH</span> </a> </li><li class="group inline-block group-hover:cursor-pointer my-1 underline-offset-4"> <a href="/tags/vo-ip/" class="relative pe-2 text-lg underline decoration-dashed group-hover:-top-0.5 group-hover:text-accent focus-visible:p-1 focus-visible:no-underline text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block opacity-80 -me-3.5 size-4"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 9l14 0" /><path d="M5 15l14 0" /><path d="M11 4l-4 16" /><path d="M17 4l-4 16" /></svg>
 &nbsp;<span>VoIP</span> </a> </li><li class="group inline-block group-hover:cursor-pointer my-1 underline-offset-4"> <a href="/tags/event-socket-layer/" class="relative pe-2 text-lg underline decoration-dashed group-hover:-top-0.5 group-hover:text-accent focus-visible:p-1 focus-visible:no-underline text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block opacity-80 -me-3.5 size-4"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 9l14 0" /><path d="M5 15l14 0" /><path d="M11 4l-4 16" /><path d="M17 4l-4 16" /></svg>
 &nbsp;<span>Event Socket Layer</span> </a> </li> </ul> <div id="btt-btn-container" class="fixed end-4 bottom-8 z-50 md:sticky md:end-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group relative bg-background px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block rotate-90 md:hidden"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 6l-6 6l6 6" /></svg> <span class="sr-only text-sm group-hover:text-accent md:not-sr-only"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block size-4"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M16 9l-4 -4" /><path d="M8 9l4 -4" /></svg>
