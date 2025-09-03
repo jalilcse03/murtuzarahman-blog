@@ -361,17 +361,9 @@ const apiUrl = "https://callussoft.com/api/authApi.php";
     function initializeAuth() {
       console.log('🚀 Initializing auth for private post');
       
-      // Check if user already authenticated in this session
-      const isAuthenticated = sessionStorage.getItem('privateAccess');
-      console.log('🔐 Session storage privateAccess:', isAuthenticated);
-      
-      if (isAuthenticated === 'granted') {
-        console.log('✅ User already authenticated, showing content');
-        showPrivateContent();
-      } else {
-        console.log('🔒 User not authenticated, showing overlay');
-        showAuthOverlay();
-      }
+      // Always show auth overlay for private posts (no session storage check)
+      console.log('🔒 Private post detected, showing authentication overlay');
+      showAuthOverlay();
       
       // Set up event listeners when DOM is ready
       if (document.readyState === 'loading') {
@@ -386,6 +378,7 @@ const apiUrl = "https://callussoft.com/api/authApi.php";
       const overlay = document.getElementById('auth-overlay');
       if (overlay) {
         overlay.style.display = 'flex';
+        console.log('👁️ Auth overlay shown');
       }
       document.body.style.overflow = 'hidden';
     }
@@ -395,8 +388,14 @@ const apiUrl = "https://callussoft.com/api/authApi.php";
       const overlay = document.getElementById('auth-overlay');
       const mainContent = document.getElementById('main-content');
       
-      if (overlay) overlay.style.display = 'none';
-      if (mainContent) mainContent.style.display = 'block';
+      if (overlay) {
+        overlay.style.display = 'none';
+        console.log('👁️ Auth overlay hidden');
+      }
+      if (mainContent) {
+        mainContent.style.display = 'block';
+        console.log('👁️ Main content shown');
+      }
       document.body.style.overflow = 'auto';
     }
     
@@ -418,6 +417,9 @@ const apiUrl = "https://callussoft.com/api/authApi.php";
           }
         });
         console.log('✅ Keypress event listener added');
+        
+        // Auto-focus the password input
+        passwordInput.focus();
       }
     }
     
@@ -449,16 +451,23 @@ const apiUrl = "https://callussoft.com/api/authApi.php";
         
         if (response.ok && result.status === 'success') {
           console.log('✅ Authentication successful');
-          sessionStorage.setItem('privateAccess', 'granted');
+          // No sessionStorage - authentication is only for this page load
           showPrivateContent();
         } else {
           console.log('❌ Authentication failed');
           showError(result.message || 'Authentication failed');
-          if (passwordInput) passwordInput.value = '';
+          if (passwordInput) {
+            passwordInput.value = '';
+            passwordInput.focus(); // Re-focus after error
+          }
         }
       } catch (error) {
         console.error('🚨 Authentication error:', error);
         showError('Network error. Please try again.');
+        const passwordInput = document.getElementById('password-input');
+        if (passwordInput) {
+          passwordInput.focus(); // Re-focus after error
+        }
       } finally {
         showLoading(false);
       }
